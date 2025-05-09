@@ -1,216 +1,113 @@
-#include <iostream>
 using namespace std;
+#include <iostream>
+#include <limits>
+#include<stdio.h>
 
-class TicTacToe {
-private:
-    char board[9];  // 存放 9 格棋盤
-    int currentPlayer;  // 1: 玩家 X, 2: 玩家 O
-
-public:
-    TicTacToe() {
-        resetBoard();
-        currentPlayer = 1;
-    }
-
-    void resetBoard() {
-        for (int i = 0; i < 9; ++i) {
-            board[i] = '1' + i;
+class board {
+  private:
+    char a[9];
+  public:
+    board(){
+        int k=49;
+        for(int i=0;i<9;i++){
+            a[i]=k++;
         }
     }
-
-    void displayBoard() {
-        cout << "-- Tic Tac Toe -- CSIE@CGU\n";
-        cout << "Player 1 (X)  -  Player 2 (O)\n\n";
-        for (int i = 0; i < 9; i += 3) {
-            cout << " " << board[i] << " | " << board[i+1] << " | " << board[i+2] << "\n";
-            if (i < 6) cout << "---+---+---\n";
+    void print_board(){
+        int k =0;
+        printf(" %c | %c | %c \n",a[0],a[1],a[2]);
+        printf("---+---+---\n");
+        printf(" %c | %c | %c \n",a[3],a[4],a[5]);
+        printf("---+---+---\n");
+        printf(" %c | %c | %c \n",a[6],a[7],a[8]);
+    }
+    bool check(int n){
+        if(1>n || n>9 || a[n-1]=='X' || a[n-1]=='O'){
+            return true;
         }
-        cout << endl;
+        else{
+            return false;
+        }
     }
-
-    bool makeMove(int pos) {
-        if (pos < 1 || pos > 9) return false;
-        if (board[pos - 1] == 'X' || board[pos - 1] == 'O') return false;
-        board[pos - 1] = (currentPlayer == 1) ? 'X' : 'O';
-        return true;
+    void move(int n ,char c ){
+        a[n-1]=c;
+        print_board();
     }
-
-    bool checkWin() {
-        const int wins[8][3] = {
-            {0,1,2},{3,4,5},{6,7,8},
-            {0,3,6},{1,4,7},{2,5,8},
-            {0,4,8},{2,4,6}
-        };
-        char symbol = (currentPlayer == 1) ? 'X' : 'O';
-        for (int i = 0; i < 8; ++i) {
-            if (board[wins[i][0]] == symbol &&
-                board[wins[i][1]] == symbol &&
-                board[wins[i][2]] == symbol) {
+    bool win_lose(char c){
+        int k=0;
+        for(int i=0;i<3;i++){
+            if(a[0+k]==c && a[1+k]==c &&a[2+k]==c){
+                return true;
+            }
+            k+=3;
+        }
+        for(int i =0;i<3;i++){
+            if(a[i]==c && a[3+i]==c && a[6+i]==c){
                 return true;
             }
         }
-        return false;
-    }
-
-    bool isDraw() {
-        for (int i = 0; i < 9; ++i) {
-            if (board[i] != 'X' && board[i] != 'O') return false;
+        if(a[0]==c && a[4]==c && a[8]==c){
+            return true;
         }
-        return true;
-    }
-
-    void switchPlayer() {
-        currentPlayer = (currentPlayer == 1) ? 2 : 1;
-    }
-
-    void play() {
-        int move;
-        while (true) {
-            displayBoard();
-            cout << "Player " << currentPlayer << ", 請輸入 [1~9] 的數字：";
-            cin >> move;
-
-            if (!cin) {
-                cin.clear(); // 清除錯誤旗標
-                cin.ignore(1000, '\n'); // 忽略輸入列
-                cout << "輸入錯誤，請重新輸入下一步\n\n";
-                continue;
-            }
-
-            if (!makeMove(move)) {
-                cout << "請重新輸入下一步\n\n";
-                continue;
-            }
-
-            if (checkWin()) {
-                displayBoard();
-                cout << "==>Player " << currentPlayer << " win\n";
-                break;
-            }
-
-            if (isDraw()) {
-                displayBoard();
-                cout << "==>Game draw\n";
-                break;
-            }
-
-            switchPlayer();
+        else if(a[2]==c && a[4]==c && a[6]==c){
+            return true;
         }
-    }
-};
-... (還剩 6 行)
-收起
-message.txt
-3 KB
-﻿
-I am a coconut!
-monkeyovo
-monkeyovo
- 
- 
-#include <iostream>
-using namespace std;
-
-class TicTacToe {
-private:
-    char board[9];  // 存放 9 格棋盤
-    int currentPlayer;  // 1: 玩家 X, 2: 玩家 O
-
-public:
-    TicTacToe() {
-        resetBoard();
-        currentPlayer = 1;
-    }
-
-    void resetBoard() {
-        for (int i = 0; i < 9; ++i) {
-            board[i] = '1' + i;
-        }
-    }
-
-    void displayBoard() {
-        cout << "-- Tic Tac Toe -- CSIE@CGU\n";
-        cout << "Player 1 (X)  -  Player 2 (O)\n\n";
-        for (int i = 0; i < 9; i += 3) {
-            cout << " " << board[i] << " | " << board[i+1] << " | " << board[i+2] << "\n";
-            if (i < 6) cout << "---+---+---\n";
-        }
-        cout << endl;
-    }
-
-    bool makeMove(int pos) {
-        if (pos < 1 || pos > 9) return false;
-        if (board[pos - 1] == 'X' || board[pos - 1] == 'O') return false;
-        board[pos - 1] = (currentPlayer == 1) ? 'X' : 'O';
-        return true;
-    }
-
-    bool checkWin() {
-        const int wins[8][3] = {
-            {0,1,2},{3,4,5},{6,7,8},
-            {0,3,6},{1,4,7},{2,5,8},
-            {0,4,8},{2,4,6}
-        };
-        char symbol = (currentPlayer == 1) ? 'X' : 'O';
-        for (int i = 0; i < 8; ++i) {
-            if (board[wins[i][0]] == symbol &&
-                board[wins[i][1]] == symbol &&
-                board[wins[i][2]] == symbol) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    bool isDraw() {
-        for (int i = 0; i < 9; ++i) {
-            if (board[i] != 'X' && board[i] != 'O') return false;
-        }
-        return true;
-    }
-
-    void switchPlayer() {
-        currentPlayer = (currentPlayer == 1) ? 2 : 1;
-    }
-
-    void play() {
-        int move;
-        while (true) {
-            displayBoard();
-            cout << "Player " << currentPlayer << ", 請輸入 [1~9] 的數字：";
-            cin >> move;
-
-            if (!cin) {
-                cin.clear(); // 清除錯誤旗標
-                cin.ignore(1000, '\n'); // 忽略輸入列
-                cout << "輸入錯誤，重新輸入\n\n";
-                continue;
-            }
-
-            if (!makeMove(move)) {
-                cout << "請重新輸入下一步\n\n";
-                continue;
-            }
-
-            if (checkWin()) {
-                displayBoard();
-                cout << "==>Player " << currentPlayer << " win\n";
-                break;
-            }
-
-            if (isDraw()) {
-                displayBoard();
-                cout << "==>Game draw\n";
-                break;
-            }
-
-            switchPlayer();
-        }
+        else return false;
     }
 };
 
-int main() {
-    TicTacToe game;
-    game.play();
-    return 0;
+class tic {
+    private:
+        board board_2;
+    public:
+        int player=0;
+        int n, rounds = 0;
+        int players=1;
+        char symbol ;
+        void start(){
+            printf("-- Tic Tac Toe -- CSIE@CGU\n");
+            printf("Player 1 (X) - Player 2 (O)\n");
+            board_2.print_board();
+            while(rounds!=9){
+                if(player%2==0){
+                    symbol ='X';
+                    players =1;
+                }
+                else{
+                    symbol='O';
+                    players =2 ;
+                }
+                while(true){
+                    printf("==> Player %d (%c), enter a number:",players,symbol);
+                    cin>>n;
+                    if(cin.fail() || board_2.check(n) ){
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+                        printf("==> Invalid value, please enter again\n");
+                    }
+                    else{
+                        rounds++;
+                        break;
+                    }
+                } 
+                board_2.move(n,symbol);
+                if(board_2.win_lose(symbol)){
+                    printf("==> Player %d wins!\n",players);
+                    break;
+                }
+                player++;
+            }
+            if(!board_2.win_lose(symbol)){
+                cout<<"==> Game draw\n";
+            }
+        }
+};
+int main()
+{   
+   tic tic_1;
+   tic_1.start();
 }
+
+
+    
+ 
